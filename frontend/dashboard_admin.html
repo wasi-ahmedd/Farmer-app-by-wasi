@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard 🌾 | FarmerApp</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    :root {
+      --bg: #f9fff9;
+      --panel: #ffffff;
+      --brand: #22c55e;
+      --brand-dark: #15803d;
+      --danger: #ef4444;
+      --text: #062d16;
+      --border: #e2e8f0;
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --muted: #64748b;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Poppins", sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(90deg, var(--brand-dark), var(--brand));
+      color: white;
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow);
+    }
+
+    header h1 {
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .logout-btn {
+      background: white;
+      color: var(--brand-dark);
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .logout-btn:hover {
+      background: #f0fdf4;
+      transform: scale(1.05);
+    }
+
+    main {
+      flex: 1;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      animation: fadeIn 0.7s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(15px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--panel);
+      border-radius: 18px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      transition: 0.3s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+    }
+
+    .card h2 {
+      color: var(--brand-dark);
+      font-size: 2rem;
+      margin: 10px 0;
+    }
+    .card p {
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .data-section {
+      background: var(--panel);
+      border-radius: 18px;
+      padding: 25px;
+      box-shadow: var(--shadow);
+    }
+
+    h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
+      justify-content: center;
+    }
+
+    select, input[type="text"] {
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      min-width: 180px;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .btn {
+      background: var(--brand);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 15px;
+      margin: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: var(--brand-dark);
+      transform: scale(1.03);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 0.95rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background: var(--brand-dark);
+      color: #fff;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: var(--panel);
+      color: var(--muted);
+      font-size: 0.85rem;
+      box-shadow: var(--shadow);
+    }
+
+    @media(max-width: 700px) {
+      header { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🌾 FarmerApp Admin</h1>
+    <button class="logout-btn" id="logoutBtn">Logout</button>
+  </header>
+
+  <main>
+    <section class="stats">
+      <div class="card">
+        <h2 id="farmerCount">0</h2>
+        <p>👨‍🌾 Farmers</p>
+      </div>
+      <div class="card">
+        <h2 id="customerCount">0</h2>
+        <p>🧑‍🤝‍🧑 Customers</p>
+      </div>
+      <div class="card">
+        <h2 id="cropCount">0</h2>
+        <p>🌱 Active Crops</p>
+      </div>
+    </section>
+    
+
+    <section class="data-section">
+      <h3>📊 Crop Demand Overview</h3>
+
+      <!-- 🌍 Filter Section -->
+      <div class="filter-section">
+        <input id="searchCrop" type="text" placeholder="Search crop name...">
+        <select id="state"><option value="">Select State</option></select>
+        <select id="district"><option value="">Select District</option></select>
+        <button class="btn" id="filterBtn">Filter</button>
+      </div>
+
+      <table id="demandTable">
+        <thead>
+          <tr>
+            <th>Crop</th>
+            <th>Farmers</th>
+            <th>Quantity (kg)</th>
+            <th>Demand Level</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="4">Loading...</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="data-section">
+      <h3>🧾 Manage Data</h3>
+      <div>
+        <button class="btn" id="showFarmers">Farmers</button>
+        <button class="btn" id="showCustomers">Customers</button>
+        <button class="btn" id="showCrops">Crops</button>
+      </div>
+
+      <div style="margin-top: 20px;">
+        <table id="dataTable">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>✨ Made with love by Wasi | FarmerApp Admin Dashboard 2025</p>
+  </footer>
+
+  <script type="module">
+    import { getAdminStats, getAllUsers, getAllCrops } from "./assets/js/api.js";
+
+    const farmerCount = document.getElementById("farmerCount");
+    const customerCount = document.getElementById("customerCount");
+    const cropCount = document.getElementById("cropCount");
+    const demandTable = document.querySelector("#demandTable tbody");
+    const dataTable = document.getElementById("dataTable");
+
+    // ✅ Load State & District filters
+    async function loadStateDistrictDropdown() {
+      const stateSelect = document.getElementById("state");
+      const districtSelect = document.getElementById("district");
+      const res = await fetch("assets/data/india_states_districts.json");
+      const data = await res.json();
+
+      data.states.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.state;
+        opt.textContent = s.state;
+        stateSelect.appendChild(opt);
+      });
+
+      stateSelect.addEventListener("change", () => {
+        districtSelect.innerHTML = "<option value=''>Select District</option>";
+        const selected = data.states.find(st => st.state === stateSelect.value);
+        if (selected) {
+          selected.districts.forEach(d => {
+            const opt = document.createElement("option");
+            opt.value = d;
+            opt.textContent = d;
+            districtSelect.appendChild(opt);
+          });
+        }
+      });
+    }
+
+    // ✅ Load stats + demand
+    async function loadStats(filters = {}) {
+      try {
+        const data = await getAdminStats(filters);
+        farmerCount.textContent = data.farmers;
+        customerCount.textContent = data.customers;
+        cropCount.textContent = data.crops;
+
+        demandTable.innerHTML = "";
+        data.demand.forEach(d => {
+          const tr = document.createElement("tr");
+          const color = d.demand_level === "High" ? "#22c55e" :
+                        d.demand_level === "Medium" ? "#eab308" : "#ef4444";
+          tr.innerHTML = `
+            <td>${d.crop}</td>
+            <td>${d.farmers}</td>
+            <td>${d.quantity}</td>
+            <td style="color:${color};font-weight:600;">${d.demand_level}</td>
+          `;
+          demandTable.appendChild(tr);
+        });
+      } catch (err) {
+        demandTable.innerHTML = `<tr><td colspan="4" style="color:red;">⚠️ ${err.message}</td></tr>`;
+      }
+    }
+
+    async function showData(type) {
+      let data = [];
+      let columns = [];
+      if (type === "farmers") {
+        data = await getAllUsers("farmer");
+        columns = ["id", "username", "village", "district", "state", "contact"];
+      } else if (type === "customers") {
+        data = await getAllUsers("customer");
+        columns = ["id", "username"];
+      } else {
+        data = await getAllCrops();
+        columns = ["id", "farmer_name", "crop", "quantity", "harvest_date", "district"];
+      }
+
+      dataTable.innerHTML = "";
+      const thead = dataTable.createTHead();
+      const trHead = thead.insertRow();
+      columns.forEach(c => {
+        const th = trHead.insertCell();
+        th.textContent = c.toUpperCase();
+      });
+
+      const tbody = dataTable.createTBody();
+      data.forEach(row => {
+        const tr = tbody.insertRow();
+        columns.forEach(c => {
+          const td = tr.insertCell();
+          td.textContent = row[c] ?? "";
+        });
+      });
+    }
+
+    // ✅ Filter crops by name/state/district
+    document.getElementById("filterBtn").onclick = async () => {
+      const cropName = document.getElementById("searchCrop").value.trim();
+      const state = document.getElementById("state").value;
+      const district = document.getElementById("district").value;
+      await loadStats({ crop: cropName, state, district });
+    };
+
+    document.getElementById("showFarmers").onclick = () => showData("farmers");
+    document.getElementById("showCustomers").onclick = () => showData("customers");
+    document.getElementById("showCrops").onclick = () => showData("crops");
+
+    document.getElementById("logoutBtn").onclick = () => {
+      localStorage.removeItem("adminLoggedIn");
+      window.location.href = "index.html";
+    };
+
+    if (localStorage.getItem("adminLoggedIn") !== "true") {
+      window.location.href = "admin_auth.html";
+    } else {
+      loadStateDistrictDropdown();
+      loadStats();
+    }
+  </script>
+</body>
+</html>

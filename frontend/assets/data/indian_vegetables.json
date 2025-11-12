@@ -1,0 +1,90 @@
+{
+  "vegetables": {
+    "Leafy Vegetables": [
+      "Spinach (Palak)",
+      "Fenugreek (Methi)",
+      "Amaranthus (Chaulai)",
+      "Coriander (Dhaniya)",
+      "Mustard Greens (Sarson Saag)",
+      "Lettuce",
+      "Bathua",
+      "Cabbage",
+      "Cauliflower"
+    ],
+    "Fruit Vegetables": [
+      "Tomato",
+      "Brinjal (Baingan)",
+      "Chilli (Mirchi)",
+      "Capsicum (Shimla Mirch)",
+      "Okra (Bhindi)",
+      "Cucumber (Kheera)",
+      "Bitter Gourd (Karela)",
+      "Bottle Gourd (Lauki)",
+      "Ridge Gourd (Turai)",
+      "Snake Gourd (Chichinda)",
+      "Pumpkin (Kaddu)",
+      "Sponge Gourd (Gilki)",
+      "Ivy Gourd (Tindora)",
+      "Pointed Gourd (Parwal)"
+    ],
+    "Root and Tuber Vegetables": [
+      "Potato (Aloo)",
+      "Onion (Pyaaz)",
+      "Garlic (Lahsun)",
+      "Carrot (Gajar)",
+      "Radish (Mooli)",
+      "Beetroot (Chukandar)",
+      "Sweet Potato (Shakarkand)",
+      "Turnip (Shalgam)",
+      "Yam (Suran)"
+    ],
+    "Leguminous Vegetables": [
+      "French Beans",
+      "Cluster Beans (Guar)",
+      "Broad Beans (Sem)",
+      "Cowpea (Lobia)",
+      "Peas (Matar)"
+    ],
+    "Other Seasonal Vegetables": [
+      "Maize (Baby Corn)",
+      "Drumstick (Moringa)",
+      "Ash Gourd (Petha)",
+      "Taro Root (Arbi)"
+    ],
+    "By Season": {
+      "Kharif (Monsoon)": [
+        "Okra (Bhindi)",
+        "Brinjal (Baingan)",
+        "Chilli (Mirchi)",
+        "Tomato",
+        "Bottle Gourd (Lauki)",
+        "Bitter Gourd (Karela)",
+        "Ridge Gourd (Turai)",
+        "Pumpkin (Kaddu)",
+        "Cucumber (Kheera)",
+        "Beans"
+      ],
+      "Rabi (Winter)": [
+        "Cabbage",
+        "Cauliflower",
+        "Peas (Matar)",
+        "Carrot (Gajar)",
+        "Radish (Mooli)",
+        "Beetroot (Chukandar)",
+        "Spinach (Palak)",
+        "Fenugreek (Methi)",
+        "Onion (Pyaaz)",
+        "Garlic (Lahsun)"
+      ],
+      "Zaid (Summer)": [
+        "Cucumber (Kheera)",
+        "Bitter Gourd (Karela)",
+        "Bottle Gourd (Lauki)",
+        "Pumpkin (Kaddu)",
+        "Watermelon (Tarbuj)",
+        "Muskmelon (Kharbuja)",
+        "Okra (Bhindi)"
+      ]
+    }
+  }
+}

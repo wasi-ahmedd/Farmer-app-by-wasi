@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FarmerApp - Smart Crop Coordination</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+
+  <header class="main-header">
+    <h1>🌾 FarmerApp</h1>
+    <p>Connecting Farmers and Customers Directly</p>
+  </header>
+
+  <main class="home-container">
+    <section class="intro">
+      <h2>Welcome to FarmerApp</h2>
+      <p>
+        A platform where farmers share their crop plans to avoid overproduction
+        and customers can buy directly from them — cutting out middlemen and ensuring fair prices.
+      </p>
+    </section>
+
+    <div class="login-options">
+      <h3>Continue as:</h3>
+      <div class="button-group">
+        <a href="farmer_auth.html"><button class="btn farmer">👨‍🌾 Farmer</button></a>
+        <a href="customer_auth.html"><button class="btn customer">🧑‍🤝‍🧑 Customer</button></a>
+        <a href="admin_auth.html"><button class="btn admin">🧑‍💼 Admin</button></a>
+
+      </div>
+    </div>
+
+    <section class="live-data">
+      <h3>📊 Recently Added Crops</h3>
+      <div id="recentCropsContainer" class="recent-crops">
+        <p>Loading latest crops...</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© 2025 FarmerApp | Empowering Farmers, Supporting Customers</p>
+  </footer>
+
+  <script type="module">
+    import { searchCrops } from "./assets/js/api.js";
+
+    const container = document.getElementById("recentCropsContainer");
+
+    async function loadRecentCrops() {
+      try {
+        const crops = await searchCrops("");
+        if (!crops.length) {
+          container.innerHTML = "<p>No crops available yet.</p>";
+          return;
+        }
+        container.innerHTML = crops.slice(0, 5).map(crop => `
+          <div class="crop-card">
+            <h4>${crop.crop}</h4>
+            <p>Harvest: ${crop.harvest_date}</p>
+            <p><b>${crop.quantity}</b> kg from ${crop.village}, ${crop.district}</p>
+            <p>Farmer: ${crop.farmer?.username || "Unknown"} | Contact: ${crop.farmer?.contact || "N/A"}</p>
+          </div>
+        `).join("");
+      } catch (e) {
+        container.innerHTML = `<p style="color:red;">Error loading crops: ${e.message}</p>`;
+      }
+    }
+
+    loadRecentCrops();
+  </script>
+</body>
+</html>

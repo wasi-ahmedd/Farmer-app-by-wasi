@@ -1,0 +1,9 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+ECHO is on.
+# Env and DB
+.env
+backend/instance/
