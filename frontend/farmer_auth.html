@@ -5,6 +5,116 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Farmer Login / Signup - FarmerApp</title>
   <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    select, input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s, box-shadow 0.2s;
+    }
+
+    select:focus, input:focus {
+      border-color: #22c55e;
+      box-shadow: 0 0 5px #22c55e60;
+    }
+
+    select option:first-child {
+      color: #999;
+    }
+
+    select {
+      background-color: #fff;
+      color: #333;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: 98%;
+      background-position-y: center;
+    }
+
+    select:invalid {
+      color: #999;
+    }
+
+    .auth-container {
+      max-width: 400px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 10px;
+      font-weight: 600;
+      border: none;
+      background: #f0f0f0;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: 0.3s;
+    }
+
+    .tabs button.active {
+      background: #22c55e;
+      color: white;
+    }
+
+    .form {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form.active {
+      display: flex;
+    }
+
+    button[type="submit"] {
+      background: #22c55e;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button[type="submit"]:hover {
+      background: #15803d;
+      transform: scale(1.03);
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 10px;
+      color: #15803d;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    #authMsg {
+      margin-top: 10px;
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
 
@@ -27,11 +137,20 @@
     <form id="farmerSignUpForm" class="form">
       <input type="text" name="username" placeholder="Username" required />
       <input type="password" name="password" placeholder="Password" required />
-      <input type="text" name="state" placeholder="State" />
-      <input type="text" name="district" placeholder="District" />
-      <input type="text" name="taluk" placeholder="Taluk" />
-      <input type="text" name="village" placeholder="Village" />
-      <input type="text" name="contact" placeholder="Contact Number" />
+
+      <!-- 🌾 Location Dropdowns -->
+      <select name="state" id="stateSelect" required>
+        <option value="" disabled selected hidden>Select State</option>
+      </select>
+
+      <select name="district" id="districtSelect" required>
+        <option value="" disabled selected hidden>Select District</option>
+      </select>
+
+      <input type="text" name="taluk" placeholder="Taluk (optional)" />
+      <input type="text" name="village" placeholder="Village (optional)" />
+      <input type="text" name="contact" placeholder="Contact Number" required />
+
       <button type="submit">Signup</button>
     </form>
 
@@ -40,7 +159,9 @@
   </div>
 
   <script type="module" src="assets/js/auth.js"></script>
+
   <script>
+    // 🔄 Tab Switcher
     const loginTab = document.getElementById('tabLogin');
     const signupTab = document.getElementById('tabSignup');
     const loginForm = document.getElementById('farmerLoginForm');
@@ -58,7 +179,43 @@
       signupForm.classList.add('active');
       loginForm.classList.remove('active');
     };
-  </script>
 
+    // 🌍 Dynamic State-District Dropdown Loader
+    async function loadStateDistricts() {
+      const stateSelect = document.getElementById("stateSelect");
+      const districtSelect = document.getElementById("districtSelect");
+
+      try {
+        const response = await fetch("assets/data/india_states_districts.json");
+        const data = await response.json();
+
+        // Fill State Dropdown
+        data.states.forEach(state => {
+          const opt = document.createElement("option");
+          opt.value = state.state;
+          opt.textContent = state.state;
+          stateSelect.appendChild(opt);
+        });
+
+        // When a state is selected, populate districts
+        stateSelect.addEventListener("change", () => {
+          districtSelect.innerHTML = "<option value='' disabled selected hidden>Select District</option>";
+          const selected = data.states.find(s => s.state === stateSelect.value);
+          if (selected) {
+            selected.districts.forEach(d => {
+              const opt = document.createElement("option");
+              opt.value = d;
+              opt.textContent = d;
+              districtSelect.appendChild(opt);
+            });
+          }
+        });
+      } catch (err) {
+        console.error("Error loading state/district data:", err);
+      }
+    }
+
+    loadStateDistricts();
+  </script>
 </body>
 </html>
