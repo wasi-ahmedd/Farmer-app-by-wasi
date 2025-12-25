@@ -1,4 +1,4 @@
-const BASE_URL = "https://farmer-app-by-wasi.onrender.com/api";
+const API_BASE = "https://farmerapp.up.railway.app";
 
 function saveToken(t) { localStorage.setItem("fa_token", t); }
 function getToken() { return localStorage.getItem("fa_token"); }
