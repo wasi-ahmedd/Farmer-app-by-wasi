@@ -8,6 +8,12 @@ from backend.routes.market import bp_market
 from backend.models import User, CropPlan
 from backend.routes.admin import admin_bp  # ✅ Import admin blueprint
 
+@app.route("/")
+def home():
+    return {
+        "status": "ok",
+        "message": "Farmer App backend is running"
+    }
 
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
