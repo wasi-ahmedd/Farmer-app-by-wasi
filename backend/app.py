@@ -7,22 +7,27 @@ from backend.routes.crops import bp_crops
 from backend.routes.market import bp_market
 from backend.routes.admin import admin_bp
 
+
 def create_app():
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(Config)
 
-    # Enable CORS
-    CORS(app, resources={r"/api/*": {"origins": app.config.get("CORS_ORIGINS", "*")}})
+    # ✅ FIXED CORS (Netlify + Local + Auth safe)
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": [
+            "https://farmerappbywasi.netlify.app",
+            "http://localhost:5500",
+            "http://127.0.0.1:5500"
+        ]}},
+        supports_credentials=True
+    )
 
     # Initialize DB and bcrypt
     db.init_app(app)
     bcrypt.init_app(app)
 
-    # ❌ DO NOT create tables on startup in production
-    # with app.app_context():
-    #     db.create_all()
-
-    # Health / root route (Railway needs fast response)
+    # Health check
     @app.route("/")
     def home():
         return {
