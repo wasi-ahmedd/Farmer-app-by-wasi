@@ -26,8 +26,9 @@ def create_app():
     # Initialize DB and bcrypt
     db.init_app(app)
     bcrypt.init_app(app)
-
-    # Health check
+    with app.app_context():
+        db.create_all()
+    #Health check
     @app.route("/")
     def home():
         return {
